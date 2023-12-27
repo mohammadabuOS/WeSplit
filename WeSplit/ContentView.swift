@@ -10,7 +10,7 @@ struct ContentView: View {
     @State private var checkAmount = 0.0
     @State private var numberOfPeople = 2
     @State private var tipPercentage = 20
-    let tipPercentages = [10, 15, 20, 25, 0]
+    let tipPercentages = [0, 5, 10, 15, 20, 25, 30]
     
     var totalPerPerson: Double {
         let peopleCount = Double(numberOfPeople + 2)
@@ -26,7 +26,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("How much is the bill?") {
+                Section("How much is the check?") {
                     TextField("Amount", value: $checkAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                         .keyboardType(.decimalPad)
                         .focused($amountIsFocused)
@@ -48,6 +48,9 @@ struct ContentView: View {
                 }
                 Section("Each person should pay:") {
                     Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                }
+                Section("Total check amount with tip:") {
+                    Text(totalPerPerson * Double(numberOfPeople + 2), format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                 }
             }
             .navigationTitle("WeSplit")
