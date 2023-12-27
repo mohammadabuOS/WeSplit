@@ -6,11 +6,11 @@
 import SwiftUI
 
 struct ContentView: View {
-    let tipPercentages = [10, 15, 20, 25, 0]
-
+    @FocusState private var amountIsFocused: Bool
     @State private var checkAmount = 0.0
     @State private var numberOfPeople = 2
     @State private var tipPercentage = 20
+    let tipPercentages = [10, 15, 20, 25, 0]
     
     var totalPerPerson: Double {
         let peopleCount = Double(numberOfPeople + 2)
@@ -29,6 +29,7 @@ struct ContentView: View {
                 Section("How much is the bill?") {
                     TextField("Amount", value: $checkAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                         .keyboardType(.decimalPad)
+                        .focused($amountIsFocused)
                 }
                 Section("How many people are splitting it?") {
                     Picker("Number of people", selection: $numberOfPeople) {
@@ -48,7 +49,15 @@ struct ContentView: View {
                 Section("Each person should pay:") {
                     Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                 }
-            }.navigationTitle("WeSplit")
+            }
+            .navigationTitle("WeSplit")
+            .toolbar {
+                if amountIsFocused {
+                    Button("Done") {
+                        amountIsFocused = false
+                    }
+                }
+            }
         }
     }
 }
